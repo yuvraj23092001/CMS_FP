@@ -204,6 +204,25 @@ namespace SmsBackend.Repository
             return records;
         }
 
+        // method to get students by classid
+
+        public async Task<StudentViewModel> GetStudentByClassId(int ClassId)
+        {
+            var records = await _context.Users.Where(t => t.FkClassId == ClassId).Select(t => new StudentViewModel()  // we are comparing the class id of the student and the given class id 
+            {
+                UserId = t.UserId,
+                FName = t.FirstName,
+                LName = t.LastName,
+                Password = t.Password,
+                Email = t.EmailId,
+                UserRole = t.UserRole,
+                Dob = t.Dob
+
+
+            }).FirstOrDefaultAsync();
+            return records;
+        }
+
 
 
 
@@ -264,30 +283,8 @@ namespace SmsBackend.Repository
             await _context.SaveChangesAsync();
 
         }
-        //chech username i.e email
-        /*
-           return teachers;
-         * public async Task<bool> checkEmailAsync(string username, int UserRole)
-         {
-             return await _context.Users.AnyAsync(x => x.Email == username && x.UserRole == UserRole);
-
-         }
-
-
-         public async Task<bool> checkTeacherEmail(string username, int UserRole)
-         {
-             return await _context.Users.AnyAsync(x => x.Email == username && x.UserRole == UserRole);
-         }
-
-
-         public async Task DeleteStudentAsync(string email)
-         {
-             var student = _context.Users.Where(x => x.Email == email).FirstOrDefault();
-             _context.Users.Remove(student);
-
-
-         }
-*/
+        
+        
 
         // All the notice methods  
 
@@ -364,6 +361,106 @@ namespace SmsBackend.Repository
 
             return new_assignment.Id;
 
+        }
+
+        // Attendence operations 
+        public async Task<Attendance> addAttendence(Attendance attendence)
+        {
+            var st_attendence = new Attendance()
+            {
+                Attended = attendence.Attended,
+                FkSubjectId = attendence.FkSubjectId,
+                FkUserId = attendence.FkUserId,
+            };
+
+            _context.Attendances.Add(st_attendence);
+            await _context.SaveChangesAsync();
+            return attendence;
+        }
+
+        // attendence reteval by subject id 
+        public async Task<List<Attendance>> GetAllAttendence()
+        {
+            return await (from a in _context.Attendances
+                          from i in _context.SubjectTeachers
+                          where a.FkSubjectId == i.FkSubjectId
+                          select new Attendance
+                          {
+                             FkSubjectId= i.FkSubjectId,
+                             Attended = a.Attended,
+                             FkUserId = a.FkUserId,
+                          }).ToListAsync();
+        }
+
+        // Update attendence of student by userId 
+       
+        public async Task UpdateAttendenceAsync(int userId, Attendance attendance)
+        {
+            var attendence = new Attendance()
+            {
+                Attended = attendance.Attended,
+                FkSubjectId = attendance.FkSubjectId,
+                FkUserId = attendance.FkUserId,
+            };
+
+            _context.Attendances.Update(attendance);
+            await _context.SaveChangesAsync();
+        }
+        
+
+        // Leave operations 
+
+        // Add leaves to be applied by the students and isApproved is not controlled by student 
+
+        public async Task<Leave> addLeave(Leave leave)
+        {
+            var Leave = new Leave()
+            {
+                FkLeaveId = leave.FkLeaveId,
+                IsApproved = 0, // student cannot have the leave approved at the time of creation 
+                Leave1 = leave.Leave1, // reason is put in this file 
+
+            };
+
+            _context.Leaves.Add(Leave);
+
+            await _context.SaveChangesAsync();
+
+            return Leave;
+        }
+
+        // Get leave by leave id  we are using this api due to database design otherwise we are able to add classid in leave .so we are able to show all leaves of students to the class teacher
+        // and then we will create leave by class id 
+
+        public async Task<Leave> getLeaveById(int LeaveId) // leave id is not same is id in leave 
+        {
+            var leave = await _context.Leaves.Where(x => x.FkLeaveId == LeaveId).Select(x => new Leave()
+            {
+                Leave1 = x.Leave1,
+                FkLeaveId = x.FkLeaveId,
+                IsApproved = x.IsApproved,
+
+            }).FirstOrDefaultAsync();
+           
+            return leave;
+        }
+
+        // update the status of leave application from the teacher side 
+
+        public async Task updateLeaveById(int LeaveId, Leave leave)
+        {
+            var item = new Leave()
+            {
+                Id = LeaveId, // overriding the current data with updated data
+                IsApproved = leave.IsApproved,
+                Leave1 = leave.Leave1,
+                FkLeaveId = leave.FkLeaveId,
+            };
+
+            _context.Leaves.Update(item);
+            await _context.SaveChangesAsync();
+
+            
         }
     }
 

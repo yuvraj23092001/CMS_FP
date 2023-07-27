@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "/pqJJzr1nx0M9xi7Q+oSiByXbr9U4n4fwuLeYUjWRDF1ppEqfC/y6MIQhVa4040p9tnOM6KlOqpt1XHml6kj/g==",
+  "dgSpecHash": "PTo5xPiCCgolpARDSeSWqFeViEdXOeeZ/n4Qmn5n74vf5pgxnJbqKQjE7cZdNAz+jRn5AzbgRFlSlNRdexuHqA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Yuvraj\\Desktop\\Login_Registration\\Login_Registration_Backend\\Backend.API\\SmsBackend\\SmsBackend.csproj",
+  "projectFilePath": "C:\\Users\\Yuvraj\\Desktop\\FINAL BACKEND DATABASE\\SmsBackend\\SmsBackend.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Yuvraj\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\Yuvraj\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",

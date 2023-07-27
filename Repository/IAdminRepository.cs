@@ -31,7 +31,11 @@ namespace SmsBackend.Repository
 
         Task<User> AddStudentAsync(StudentViewModel t);
 
+        Task UpdateStudentAsync(int userId, StudentViewModel teacher);
+
         Task DeleteStudentAsync(string email);
+
+        Task<StudentViewModel> GetStudentByClassId(int ClassId);
 
         // notice tasks 
 
@@ -44,6 +48,22 @@ namespace SmsBackend.Repository
         Task DeleteNoticeAsync(int Id);
 
         Task<int> AssignTeacherAsync(int T_id, int Subject_id);
+
+        // attendence tasks 
+
+        Task<Attendance> addAttendence(Attendance attendence);
+
+        Task<List<Attendance>> GetAllAttendence();
+
+        Task UpdateAttendenceAsync(int userId, Attendance attendance);
+
+        // leave tasks 
+
+        Task<Leave> addLeave(Leave leave);
+
+        Task<Leave> getLeaveById(int LeaveId);
+
+        Task updateLeaveById(int LeaveId, Leave leave);
 
     }
 }

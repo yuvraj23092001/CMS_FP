@@ -56,5 +56,9 @@ namespace SmsBackend.Controllers
                 Message ="User Registered"
             });
         }
+
+        // add class teachers to the classes so we are able to get students based on their class id 
+
+
     }
 }

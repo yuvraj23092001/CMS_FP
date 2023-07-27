@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SmsBackend.Models;
 using SmsBackend.Repository;
 using SmsBackend.ViewModels;
 
@@ -11,7 +12,7 @@ namespace SmsBackend.Controllers
     {
         private readonly IAdminRepository _adminRepostitory;
 
-         public AdminController(IAdminRepository adminRepostitory)
+        public AdminController(IAdminRepository adminRepostitory)
         {
             _adminRepostitory = adminRepostitory;
 
@@ -35,15 +36,15 @@ namespace SmsBackend.Controllers
 
         // no need to use createdataction currently but need to use in future projects as it is part of best practices.
 
-        [HttpPost("teachers/")]
+        [HttpPost("teachers/add")]
 
         public async Task<IActionResult> AddTeacher([FromBody] TeacherViewModel teacher)
         {
             var id = await _adminRepostitory.AddTeacherAsync(teacher);
             return Ok(id);/*CreatedAtAction(nameof(GetTeacherByID), new { UserId = id, Controller = "Admin" }, id);*/
         }
-    
-        
+
+
         // method to get teacher by the id 
 
         [HttpGet("teacher-id/{id}")]
@@ -53,7 +54,7 @@ namespace SmsBackend.Controllers
             var teachers = await _adminRepostitory.GetTeacherIdAsync(id);
             if (teachers == null)
             {
-                return NotFound( new { message = "teacher operation is returning a null value meaning teacher by the provided id doesnot exist. "});
+                return NotFound(new { message = "teacher operation is returning a null value meaning teacher by the provided id doesnot exist. " });
             }
             return Ok(teachers);
         }
@@ -86,7 +87,7 @@ namespace SmsBackend.Controllers
 
         public async Task<IActionResult> DeleteTeacher([FromRoute] string email)
         {
-            await _adminRepostitory.DeleteTeacherAsync(email); 
+            await _adminRepostitory.DeleteTeacherAsync(email);
             return Ok();
         }
 
@@ -108,7 +109,7 @@ namespace SmsBackend.Controllers
 
         // method to add students to the userbase
 
-        [HttpPost("students/")]
+        [HttpPost("students/add")]
 
         public async Task<IActionResult> AddStudents([FromBody] StudentViewModel student)
         {
@@ -134,7 +135,7 @@ namespace SmsBackend.Controllers
 
         [HttpGet("student/{Email}")]
 
-        public async Task<IActionResult> GetTeacherByEmail([FromRoute] string Email)
+        public async Task<IActionResult> GetstudentbyEmail([FromRoute] string Email)
         {
             var teachers = await _adminRepostitory.GetStudentByEmail(Email);
             if (teachers == null)
@@ -144,8 +145,30 @@ namespace SmsBackend.Controllers
             return Ok(teachers);
         }
 
+        // method to get student by the class id so as to retrieve data for attendence by class teacher 
+
+        [HttpGet("student-classid/{ClassId}")]
+
+        public async Task<IActionResult> GetStudentByClassId([FromRoute] int ClassId)
+        {
+            var teachers = await _adminRepostitory.GetStudentByClassId(ClassId);
+            if (teachers == null)
+            {
+                return NotFound(new { message = "student operation is returning a null value meaning the provided class id is not right. " });
+            }
+            return Ok(teachers);
+        }
+
+
         // method to update student user by userid 
 
+        [HttpPut("student/update/{UserId}")]
+
+        public async Task<IActionResult> updateStudentById([FromBody] StudentViewModel StudentViewModel, [FromRoute] int UserId)
+        {
+            await _adminRepostitory.UpdateStudentAsync(UserId, StudentViewModel);
+            return Ok();
+        }
 
         // method to delete the student by the email id 
 
@@ -161,13 +184,13 @@ namespace SmsBackend.Controllers
 
         // method to get all notices 
 
-        [HttpGet("notice/")]
+        [HttpGet("notice/get")]
 
         public async Task<IActionResult> GetAllNoticesAsync()
         {
             var notice = await _adminRepostitory.GetAllNoticeAsync();
 
-            if( notice == null)
+            if (notice == null)
             {
                 return NotFound();
             }
@@ -183,7 +206,7 @@ namespace SmsBackend.Controllers
         {
             var notice = await _adminRepostitory.GetNoticeByCreatedByAsync(id);
 
-            if(notice == null)
+            if (notice == null)
             {
                 return NotFound();
             }
@@ -193,7 +216,7 @@ namespace SmsBackend.Controllers
 
         // method to add new notice to the database 
 
-        [HttpPost("notice/")]
+        [HttpPost("notice/add")]
 
         public async Task<IActionResult> AddNotice([FromBody] NoticeViewModel notice)
         {
@@ -219,9 +242,9 @@ namespace SmsBackend.Controllers
         {
             var id = await _adminRepostitory.AssignTeacherAsync(T_id, Subject_id);
 
-            if(id == 0)
+            if (id == 0)
             {
-                return NotFound( new { message = "Please enter a valid subject id "});
+                return NotFound(new { message = "Please enter a valid subject id " });
             }
 
             return Ok(id);
@@ -231,6 +254,73 @@ namespace SmsBackend.Controllers
 
         // Attendence operations 
 
+        // We dont need to delete attendence as teacher will be the one marking it 
+        // we just need a add attendence method and update attendence method 
 
-    }
+        [HttpPost("attendence/add")]
+
+        // add attendence of a user 
+        public async Task<IActionResult> AddAttendence([FromBody] Attendance student)
+        {
+            var id = await _adminRepostitory.addAttendence(student);
+            return Ok(id);
+        }
+
+        // update attendence of a student by userId 
+
+
+        [HttpPut("attendence/update/{UserId}")]
+
+        public async Task<IActionResult> updateAttendenceById([FromBody] Attendance attedence, [FromRoute] int UserId)
+        {
+            await _adminRepostitory.UpdateAttendenceAsync(UserId, attedence);
+            return Ok();
+        }
+
+
+        // Leave operations 
+
+        // Student applys for a leave but isApproved is set as false in the start 
+
+        [HttpPost("leave/add")]
+
+        public async Task<IActionResult> addLeave(Leave leave)
+        {
+            var id = await _adminRepostitory.addLeave(leave);
+
+            if (id == null)
+            {
+                return NotFound(new { Message = " Not able to add leave to the system " });
+            }
+
+            return Ok(id);
+        }
+
+        //  Get leaves applied by leave id  
+
+        [HttpGet("leave/{id}")]
+
+        public async Task<IActionResult> getLeaveByUserId([FromRoute] int id)
+        {
+            var leave = await _adminRepostitory.getLeaveById(id);
+
+            if (leave == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(leave);
+        }
+
+        // Update leaves isApproved by teacher of the class 
+        [HttpPut("leave/update/{UserId}")]
+
+        public async Task<IActionResult> updateLeaveById([FromRoute] int LeaveId, [FromBody] Leave leave)
+        {
+            await _adminRepostitory.updateLeaveById(LeaveId, leave);
+            return Ok();
+        }
+
+
+    } 
 }

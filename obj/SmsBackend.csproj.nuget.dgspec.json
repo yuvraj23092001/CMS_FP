@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Yuvraj\\Desktop\\Login_Registration\\Login_Registration_Backend\\Backend.API\\SmsBackend\\SmsBackend.csproj": {}
+    "C:\\Users\\Yuvraj\\Desktop\\FINAL BACKEND DATABASE\\SmsBackend\\SmsBackend.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Yuvraj\\Desktop\\Login_Registration\\Login_Registration_Backend\\Backend.API\\SmsBackend\\SmsBackend.csproj": {
+    "C:\\Users\\Yuvraj\\Desktop\\FINAL BACKEND DATABASE\\SmsBackend\\SmsBackend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Yuvraj\\Desktop\\Login_Registration\\Login_Registration_Backend\\Backend.API\\SmsBackend\\SmsBackend.csproj",
+        "projectUniqueName": "C:\\Users\\Yuvraj\\Desktop\\FINAL BACKEND DATABASE\\SmsBackend\\SmsBackend.csproj",
         "projectName": "SmsBackend",
-        "projectPath": "C:\\Users\\Yuvraj\\Desktop\\Login_Registration\\Login_Registration_Backend\\Backend.API\\SmsBackend\\SmsBackend.csproj",
+        "projectPath": "C:\\Users\\Yuvraj\\Desktop\\FINAL BACKEND DATABASE\\SmsBackend\\SmsBackend.csproj",
         "packagesPath": "C:\\Users\\Yuvraj\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Yuvraj\\Desktop\\Login_Registration\\Login_Registration_Backend\\Backend.API\\SmsBackend\\obj\\",
+        "outputPath": "C:\\Users\\Yuvraj\\Desktop\\FINAL BACKEND DATABASE\\SmsBackend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Yuvraj\\AppData\\Roaming\\NuGet\\NuGet.Config",
